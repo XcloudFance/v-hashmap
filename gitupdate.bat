@@ -1,3 +1,3 @@
 git add .
-git commit -m "To commit the first version"
+git commit -m "fix bug"
 git push -u origin master

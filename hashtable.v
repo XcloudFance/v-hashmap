@@ -48,17 +48,23 @@ pub fn (u mut Noder) insert(key string,val string){
 	tmp.key = key
 	tmp.val = val
 	u.list << tmp
+	
 }
 
-
+fn step (s string)string{
+	return '"'+s+'"'
+}
 pub fn (u hashmap.Noder) find(key string)string{
 	mut ret := ""
+	if u.list.len == 0{
+		return 'The key doesn\'t exist'
+	}
 	for i in u.list{
 		if i.key == key{
 			ret = i.val
 		}
 	}
-	return ret
+	return step(ret)
 }
 pub struct Hashtable {
 	pub mut:
@@ -100,10 +106,7 @@ pub fn (u mut Hashtable) initalize(){
 		}
 }
 
-pub fn(u Hashtable) [] (key string) string{
-	return u.hashlist[u.gethashcode(key)%99999].find(key)
-}
-}
+
 fn main()
 {
 	mut hashmap := Hashtable{}
