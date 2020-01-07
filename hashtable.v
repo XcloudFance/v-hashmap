@@ -1,7 +1,10 @@
 // 目前还不知道vlang里面typedef的用法，暂时把size_t 用 uint64 代替
 //pow是快速幂
 module hashmap
-fn pow(A,B u64) u64{
+//HashmapTree就是一个hashmap+红黑树的做法，将列表O(n)转为O(logn)的查询速度
+//但是存储速度也从O(1~n)变成了O(logn)
+//适用于大数据
+pub fn pow(A,B u64) u64{
 	mut b := B
 	mut ans:=u64(1)
 	mut res:= A
@@ -15,7 +18,7 @@ fn pow(A,B u64) u64{
 	return ans
 }
 
-fn range(num int) []int{
+pub fn range(num int) []int{
 	if num == 0{
 		return []
 	}
@@ -98,6 +101,20 @@ pub fn (u mut Hashtable) insert(key , val string){
 pub fn (u Hashtable) got(key string) string{
 	return u.hashlist[u.gethashcode(key)%99999].find(key)
 }
+pub fn(u mut Noder) del (key string)
+{
+	for i in range(u.list.len)
+	{
+		if u.list[i].key == key{
+			u.list[i].key = ''
+		}
+	}
+
+}
+pub fn (u mut Hashtable) delete (key string) {
+	position := u.gethashcode(key)%99999 //取hash值
+	u.hashlist[position].del(key)
+}
 
 pub fn (u mut Hashtable) initalize(){
 		for i in range(99999){
@@ -106,6 +123,51 @@ pub fn (u mut Hashtable) initalize(){
 		}
 }
 
+pub struct Treenode{
+	pub mut:
+		list map[string]string
+}
+
+pub struct HashtableTree{
+	pub mut:
+		hashlist [99999]hashmap.Treenode
+}
+
+pub fn(u mut Treenode) append(key string, value string)
+{
+
+	u.list[key] = value
+}
+
+fn (u HashtableTree) gethashcode(s string) u64 {
+	mut ret := u64(0)
+	for tmp in s
+	{
+		ret = u64(5*ret + int(tmp))
+	}
+	return ret
+} 
+
+pub fn (u mut HashtableTree) insert(key string,value string)
+{
+	u.hashlist[u.gethashcode(key)%99999].append(key,value)
+}
+
+pub fn (u HashtableTree) got (key string) string
+{
+	return u.hashlist[u.gethashcode(key)%99999].list[key]
+}
+pub fn (u mut HashtableTree) del (key string)
+{
+	u.hashlist[u.gethashcode(key)%99999].list.delete(key)
+}
+
+pub fn (u mut HashtableTree) initalize(){
+		for i in range(99999){
+			tmp := Treenode{}
+			u.hashlist[i] = tmp 
+		}
+}
 
 fn main()
 {
